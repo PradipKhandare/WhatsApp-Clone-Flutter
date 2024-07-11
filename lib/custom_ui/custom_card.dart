@@ -5,39 +5,47 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomCard extends StatelessWidget {
   const CustomCard({super.key, required this.chatModel});
+
   final ChatModel chatModel;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const IndividualPage()));
+      onTap: () {
+        Navigator.push(context,
+            MaterialPageRoute(builder: (context) =>  IndividualPage(chatModel: chatModel),),);
       },
       child: Column(
         children: [
           ListTile(
             leading: CircleAvatar(
               radius: 30,
-              child: SvgPicture.asset(chatModel.isGroup ?"assets/group.svg": "assets/person.svg", color: Colors.white, height: 38, width: 38,),
+              child: SvgPicture.asset(
+                chatModel.isGroup! ? "assets/group.svg" : "assets/person.svg",
+                color: Colors.white,
+                height: 38,
+                width: 38,
+              ),
               backgroundColor: Colors.blueGrey,
             ),
             title: Text(
-              chatModel.name,
+              chatModel.name!,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
-
             subtitle: Row(
               children: [
                 Icon(Icons.done_all),
-                SizedBox(width: 3,),
+                SizedBox(
+                  width: 3,
+                ),
                 Text(
-                  chatModel.currentMessage,
+                  chatModel.currentMessage!,
                   style: TextStyle(fontSize: 13),
                 ),
               ],
             ),
             trailing: Text(
-              chatModel.time,
+              chatModel.time!,
               style: TextStyle(color: Colors.grey),
             ),
           ),
@@ -52,4 +60,3 @@ class CustomCard extends StatelessWidget {
     );
   }
 }
-
