@@ -1,6 +1,10 @@
 import 'package:camera/camera.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
+import 'camera_view.dart';
+import 'package:image_picker/image_picker.dart';
 
 late List<CameraDescription> cameras;
 
@@ -14,12 +18,20 @@ class CameraScreen extends StatefulWidget {
 class _CameraScreenState extends State<CameraScreen> {
   late CameraController _cameraController;
   late Future<void> cameraValue;
+  bool _isTakingPicture = false; // Flag to track if a picture is being taken
+  File? _selectedImage;
 
   @override
   void initState() {
     super.initState();
     _cameraController = CameraController(cameras[0], ResolutionPreset.high);
     cameraValue = _cameraController.initialize();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cameraController.dispose();
   }
 
   @override
@@ -55,19 +67,25 @@ class _CameraScreenState extends State<CameraScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.flash_off,
-                            color: Colors.white,
-                            size: 28,
-                          )),
+                        onPressed: () {},
+                        icon: Icon(
+                          Icons.flash_off,
+                          color: Colors.white,
+                          size: 28,
+                        ),
+                      ),
                       IconButton(
-                          onPressed: () {},
-                          icon: Icon(
-                            Icons.panorama_fish_eye,
-                            color: Colors.white,
-                            size: 70,
-                          )),
+                        onPressed: () {
+                          if (!_isTakingPicture) {
+                            takePhoto(context);
+                          }
+                        },
+                        icon: Icon(
+                          Icons.panorama_fish_eye,
+                          color: Colors.white,
+                          size: 70,
+                        ),
+                      ),
                       IconButton(
                         onPressed: () {},
                         icon: Icon(
@@ -79,10 +97,13 @@ class _CameraScreenState extends State<CameraScreen> {
                     ],
                   ),
                   SizedBox(height: 4,),
-                  Text("hold for video, tap for photo", style: TextStyle(
-                    color: Colors.white,
+                  Text(
+                    "hold for video, tap for photo",
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    textAlign: TextAlign.center,
                   ),
-                  textAlign: TextAlign.center,),
                 ],
               ),
             ),
@@ -90,5 +111,37 @@ class _CameraScreenState extends State<CameraScreen> {
         ],
       ),
     );
+  }
+
+  void takePhoto(BuildContext context) async {
+    if (_isTakingPicture) return;
+    setState(() {
+      _isTakingPicture = true;
+    });
+
+    try {
+      final imagePicker = ImagePicker();
+      final pickedImage = await imagePicker.pickImage(
+        source: ImageSource.camera,
+        maxHeight: 600,
+      );
+
+      if (pickedImage == null) {
+        return;
+      }
+
+      setState(() {
+        _selectedImage = File(pickedImage.path);
+      });
+
+      Navigator.push(context, MaterialPageRoute(builder: (builder) => CameraView(path: _selectedImage!.path)));
+    } catch (e) {
+      // Handle any errors here
+      print(e);
+    } finally {
+      setState(() {
+        _isTakingPicture = false;
+      });
+    }
   }
 }
