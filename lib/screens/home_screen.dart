@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_node_express_mongo/pages/camera_page.dart';
 import 'package:flutter_node_express_mongo/pages/chat_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -93,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen>
       body: TabBarView(
         controller: _tabController,
         children: [
-          Text('Camera'),
+          CameraPage(),
           ChatPage(),
           Text('Status'),
           Text('Calls'),

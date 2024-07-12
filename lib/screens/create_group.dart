@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_node_express_mongo/custom_ui/button_card.dart';
+import 'package:flutter_node_express_mongo/custom_ui/avatar_card.dart';
 import 'package:flutter_node_express_mongo/model/chat_model.dart';
-import 'package:flutter_node_express_mongo/screens/create_group.dart';
 
 import '../custom_ui/contact_card.dart';
 
-class SelectContact extends StatefulWidget {
-  const SelectContact({super.key});
+class CreateGroup extends StatefulWidget {
+  const CreateGroup({super.key});
 
   @override
-  State<SelectContact> createState() => _SelectContactState();
+  State<CreateGroup> createState() => _CreateGroupState();
 }
 
-class _SelectContactState extends State<SelectContact> {
+class _CreateGroupState extends State<CreateGroup> {
   List<ChatModel> contacts = [
     ChatModel(name: "Pradip Khandare", status: "Mobile app developer"),
     ChatModel(name: "Shreyash Jadhav", status: "Automation tester"),
@@ -39,6 +38,7 @@ class _SelectContactState extends State<SelectContact> {
     ChatModel(name: "Harper Scott", status: "App Developer"),
     ChatModel(name: "Alex Reed", status: "App Developer"),
   ];
+  List<ChatModel> groups = [];
 
   @override
   Widget build(BuildContext context) {
@@ -57,14 +57,14 @@ class _SelectContactState extends State<SelectContact> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              "Select contact",
+              "New group",
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 19,
                   fontWeight: FontWeight.bold),
             ),
             Text(
-              "280 contacts",
+              "Add participants",
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 13,
@@ -72,67 +72,72 @@ class _SelectContactState extends State<SelectContact> {
             ),
           ],
         ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: Icon(
-              Icons.search,
-              size: 26,
-              color: Colors.white,
-            ),
-          ),
-          IconTheme(
-            data: IconThemeData(
-              color: Colors.white,
-            ),
-            child: PopupMenuButton<String>(
-              onSelected: (value) {
-                print(value);
-              },
-              itemBuilder: (BuildContext context) {
-                return [
-                  PopupMenuItem(
-                    value: 'Invite a friend',
-                    child: Text('Invite a friend'),
-                  ),
-                  PopupMenuItem(
-                    value: 'Contacts',
-                    child: Text('Contacts'),
-                  ),
-                  PopupMenuItem(
-                    value: 'Refresh',
-                    child: Text('Refresh'),
-                  ),
-                  PopupMenuItem(
-                    value: 'Help',
-                    child: Text('Help'),
-                  ),
-                ];
-              },
-            ),
-          ),
-        ],
       ),
-      body: ListView.builder(
-          itemCount: contacts.length + 2,
-          itemBuilder: (context, index) {
-            if (index == 0) {
+      body: Stack(
+        children: [
+          ListView.builder(
+            itemCount: contacts.length + 1,
+            itemBuilder: (context, index) {
+              if(index == 0){
+                return Container(
+                  height: groups.length > 0 ? 90: 10,
+                );
+              }
               return InkWell(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CreateGroup(),
-                    ),
-                  );
+                  if (contacts[index - 1].select == false) {
+                    setState(() {
+                      contacts[index - 1].select = true;
+                      groups.add(contacts[index - 1]);
+                    });
+                  } else {
+                    setState(() {
+                      contacts[index].select = false;
+                      groups.remove(contacts[index - 1]);
+                    });
+                  }
                 },
-                child: ButtonCard(icon: Icons.group, name: 'New group'),
+                child: ContactCard(
+                  contact: contacts[index - 1],
+                ),
               );
-            } else if (index == 1) {
-              return ButtonCard(icon: Icons.person, name: 'New contact');
-            }
-            return ContactCard(contact: contacts[index - 2]);
-          }),
+            },
+          ),
+         groups.length > 0 ? Column(
+            children: [
+              Container(
+                height: 75,
+                color: Colors.white,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: contacts.length,
+                  itemBuilder: (context, index) {
+                    if (contacts[index].select == true) {
+                      return InkWell(
+                        onTap: (){
+                            setState(() {
+                              groups.remove(contacts[index]);
+                              contacts[index].select = false;
+                            });
+                        },
+                        child: AvatarCard(
+                          contact: contacts[index],
+                        ),
+                      );
+                    } else {
+                      return Container();
+                    }
+                  },
+                ),
+              ),
+              Divider(
+                thickness: 1,
+                color: Colors.grey[100],
+              ),
+            ],
+          ) : Container(),
+        ],
+      ),
     );
   }
 }
