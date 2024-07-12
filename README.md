@@ -7,3 +7,15 @@ Initial UI of this clone app looks as in the following image:
 Contact screen UI of the whatsapp clone looks like:
 
 <img src="https://github.com/user-attachments/assets/b96241a3-1444-41fb-b4da-a7beaf3487fe" alt="Contact Screen UI" width="300" height="500"/>
+
+New group screen UI from the contact screen:
+
+<img src="https://github.com/user-attachments/assets/f45b3248-5812-4ed9-9c3a-3f290fdccc47" alt="New Group Screen UI" width="300" height="500"/>
+
+Individual chat screens UI:
+
+<img src="https://github.com/user-attachments/assets/3ecbe115-dd77-4d36-85ac-70f63912c689" alt="Individual Chat Screens UI" width="300" height="500"/>
+
+Camera screens UI:
+
+<img src="https://github.com/user-attachments/assets/904ae6ba-3a61-429a-8435-8ffe9fb8412d" alt="Camera Screens UI" width="300" height="500"/>
