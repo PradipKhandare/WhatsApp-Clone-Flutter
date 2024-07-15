@@ -6,6 +6,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_node_express_mongo/model/chat_model.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'package:socket_io_client/socket_io_client.dart' as IO;
+
 class IndividualPage extends StatefulWidget {
   const IndividualPage({super.key, required this.chatModel});
 
@@ -20,6 +22,8 @@ class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   TextEditingController textEditingController = TextEditingController();
 
+  late IO.Socket socket;
+
   @override
   void initState() {
     super.initState();
@@ -31,6 +35,10 @@ class _IndividualPageState extends State<IndividualPage> {
       }
     });
   }
+
+  // void connect(){
+  //   socket = IO.io(uri);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +55,7 @@ class _IndividualPageState extends State<IndividualPage> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(
+              const Icon(
                 Icons.arrow_back,
                 color: Colors.white,
                 size: 24,
@@ -70,19 +78,19 @@ class _IndividualPageState extends State<IndividualPage> {
         title: InkWell(
           onTap: () {},
           child: Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   widget.chatModel.name!,
-                  style: TextStyle(
+                  style: const TextStyle(
                       fontSize: 18.5,
                       color: Colors.white,
                       fontWeight: FontWeight.bold),
                 ),
-                Text(
+                const Text(
                   "Last seen today at 01:02",
                   style: TextStyle(
                     fontSize: 13,
@@ -96,47 +104,47 @@ class _IndividualPageState extends State<IndividualPage> {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.videocam,
               color: Colors.white,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.call,
               color: Colors.white,
             ),
           ),
           IconTheme(
-            data: IconThemeData(color: Colors.white),
+            data: const IconThemeData(color: Colors.white),
             child: PopupMenuButton<String>(
               onSelected: (value) {
                 print(value);
               },
               itemBuilder: (BuildContext context) {
                 return [
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'View contact',
                     child: Text('View contact'),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'Media, links and docs',
                     child: Text('Media, links and docs'),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'Whatsapp web',
                     child: Text('WhatsApp web'),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'Search',
                     child: Text('Search'),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'Mute Notification',
                     child: Text('Mute Notification'),
                   ),
-                  PopupMenuItem(
+                  const PopupMenuItem(
                     value: 'Wallpaper',
                     child: Text('Wallpaper'),
                   ),
@@ -173,7 +181,7 @@ class _IndividualPageState extends State<IndividualPage> {
                         Container(
                           width: MediaQuery.of(context).size.width - 60,
                           child: Card(
-                            margin: EdgeInsets.only(
+                            margin: const EdgeInsets.only(
                               left: 2,
                               right: 2,
                               bottom: 8,
@@ -191,7 +199,7 @@ class _IndividualPageState extends State<IndividualPage> {
                               decoration: InputDecoration(
                                 border: InputBorder.none,
                                 hintText: "Type a message",
-                                contentPadding: EdgeInsets.all(5),
+                                contentPadding: const EdgeInsets.all(5),
                                 prefixIcon: IconButton(
                                   onPressed: () {
                                     setState(() {
@@ -242,7 +250,7 @@ class _IndividualPageState extends State<IndividualPage> {
                             radius: 25,
                             child: IconButton(
                               onPressed: () {},
-                              icon: Icon(
+                              icon: const Icon(
                                 Icons.mic,
                                 color: Colors.white,
                               ),
@@ -267,7 +275,7 @@ class _IndividualPageState extends State<IndividualPage> {
       height: 278,
       width: MediaQuery.of(context).size.width,
       child: Card(
-        margin: EdgeInsets.all(18),
+        margin: const EdgeInsets.all(18),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 20),
           child: Column(
@@ -276,20 +284,20 @@ class _IndividualPageState extends State<IndividualPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   iconCreation(Icons.insert_drive_file, Colors.indigo, 'Documents'),
-                  SizedBox(width: 40,),
+                  const SizedBox(width: 40,),
                   iconCreation(Icons.camera_alt, Colors.pink, 'Camera'),
-                  SizedBox(width: 40,),
+                  const SizedBox(width: 40,),
                   iconCreation(Icons.insert_photo, Colors.purple, 'Gallery'),
                 ],
               ),
-              SizedBox(height: 30,),
+              const SizedBox(height: 30,),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   iconCreation(Icons.headset, Colors.orange, 'Audio'),
-                  SizedBox(width: 40,),
+                  const SizedBox(width: 40,),
                   iconCreation(Icons.location_pin, Colors.teal, 'Location'),
-                  SizedBox(width: 40,),
+                  const SizedBox(width: 40,),
                   iconCreation(Icons.person, Colors.blue, 'Contact'),
                 ],
               ),
@@ -314,8 +322,8 @@ class _IndividualPageState extends State<IndividualPage> {
               color: Colors.white,
             ),
           ),
-          SizedBox(height: 5,),
-          Text(text, style: TextStyle(
+          const SizedBox(height: 5,),
+          Text(text, style: const TextStyle(
             fontSize: 12,
           ),),
         ],
