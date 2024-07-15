@@ -1,5 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_node_express_mongo/screens/video_view.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
@@ -20,6 +21,7 @@ class _CameraScreenState extends State<CameraScreen> {
   late Future<void> cameraValue;
   bool _isTakingPicture = false; // Flag to track if a picture is being taken
   File? _selectedImage;
+  bool isRecoring = false;
 
   @override
   void initState() {
@@ -74,13 +76,36 @@ class _CameraScreenState extends State<CameraScreen> {
                           size: 28,
                         ),
                       ),
-                      IconButton(
-                        onPressed: () {
-                          if (!_isTakingPicture) {
-                            takePhoto(context);
-                          }
+                      GestureDetector(
+                        onLongPress: () async {
+                          await _cameraController.startVideoRecording();
+                          setState(() {
+                            isRecoring = true;
+                          });
                         },
-                        icon: Icon(
+                        onLongPressUp: () async {
+                          XFile videopath =
+                          await _cameraController.stopVideoRecording();
+                          setState(() {
+                            isRecoring = false;
+                          });
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (builder) => VideoView(
+                                    path: videopath.path,
+                                  ),),);
+                        },
+                        onTap: () {
+                          if (!isRecoring) takePhoto(context);
+                        },
+                        child: isRecoring
+                            ? Icon(
+                          Icons.radio_button_on,
+                          color: Colors.red,
+                          size: 80,
+                        )
+                            : Icon(
                           Icons.panorama_fish_eye,
                           color: Colors.white,
                           size: 70,

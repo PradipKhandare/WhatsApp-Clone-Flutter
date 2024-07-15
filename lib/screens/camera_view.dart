@@ -15,28 +15,28 @@ class CameraView extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.crop_rotate,
               size: 27,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.emoji_emotions_outlined,
               size: 27,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.title,
               size: 27,
             ),
           ),
           IconButton(
             onPressed: () {},
-            icon: Icon(
+            icon: const Icon(
               Icons.edit,
               size: 27,
             ),
@@ -61,17 +61,17 @@ class CameraView extends StatelessWidget {
               child: Container(
                 color: Colors.black38,
                 width: MediaQuery.of(context).size.width,
-                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 5),
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 5),
                 child: TextFormField(
                   maxLines: 6,
                   minLines: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 17,
                   ),
                   decoration: InputDecoration(
                     hintText: 'Add caption',
-                    hintStyle: TextStyle(
+                    hintStyle: const TextStyle(
                       color: Colors.white,
                       fontSize: 17,
                     ),
@@ -79,12 +79,12 @@ class CameraView extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 8.0), // Add some padding if needed
                       child: CircleAvatar(
                         radius: 15,
-                        child: Icon(Icons.check, size: 18),
+                        child: const Icon(Icons.check, size: 18),
                         backgroundColor: Colors.tealAccent[700],
                       ),
                     ),
-                    prefixIcon: Padding(
-                      padding: const EdgeInsets.only(left: 8.0), // Add some padding if needed
+                    prefixIcon: const Padding(
+                      padding: EdgeInsets.only(left: 8.0), // Add some padding if needed
                       child: Icon(
                         Icons.add_photo_alternate,
                         color: Colors.white,
@@ -92,7 +92,7 @@ class CameraView extends StatelessWidget {
                       ),
                     ),
                     border: InputBorder.none,
-                    contentPadding: EdgeInsets.symmetric(vertical: 10), // Adjust as needed
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10), // Adjust as needed
                   ),
                 ),
               ),
