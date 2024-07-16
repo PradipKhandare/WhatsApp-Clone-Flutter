@@ -26,6 +26,7 @@ class _IndividualPageState extends State<IndividualPage> {
   @override
   void initState() {
     super.initState();
+    connect();
     focusNode.addListener(() {
       if (focusNode.hasFocus) {
         setState(() {
@@ -35,9 +36,19 @@ class _IndividualPageState extends State<IndividualPage> {
     });
   }
 
-  // void connect(){
-  //   socket = IO.io(uri);
-  // }
+  void connect(){
+    socket = IO.io("http://192.168.0.72:6000", <String, dynamic>{
+      "transports":["websocket"],
+      "autoConnect":false,
+      'timeout': 10000, // Optional: set a longer timeout
+    });
+    socket.connect();
+    socket.emit("/test", "Hello World");
+    socket.onConnect((_) {
+      print('Connected');
+    });
+    print(socket.connected);
+  }
 
   @override
   Widget build(BuildContext context) {
