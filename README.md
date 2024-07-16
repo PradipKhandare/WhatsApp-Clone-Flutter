@@ -17,5 +17,8 @@ Initial UI of this clone app looks as in the following image:
   <img src="https://github.com/user-attachments/assets/e8f809c8-72f2-4aed-b50f-90c1172b6ed4" alt="Camera video recording Screen UI" width="100" height="200"/>
 
   <img src="https://github.com/user-attachments/assets/6bebc79e-f48f-4838-9b52-b1e282560097" alt="Camera video recording Screen UI" width="100" height="200"/>
+  <img src="https://github.com/user-attachments/assets/65b56aeb-6184-4d94-96d0-1f7710b567f5" alt="Camera video recording Screen UI" width="100" height="200"/>
+  <img src="https://github.com/user-attachments/assets/e8a49e6a-9120-4150-9e8b-88376911089a" alt="Camera video recording Screen UI" width="100" height="200"/>
 </div>
+
 
