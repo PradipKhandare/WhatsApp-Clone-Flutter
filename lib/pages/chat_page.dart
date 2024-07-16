@@ -4,57 +4,14 @@ import 'package:flutter_node_express_mongo/custom_ui/custom_card.dart';
 import 'package:flutter_node_express_mongo/screens/select_contact.dart';
 
 class ChatPage extends StatefulWidget {
-  const ChatPage({super.key});
-
+  const ChatPage({super.key, this.chatModels, this.sourceChat});
+  final List<ChatModel>? chatModels;
+  final ChatModel? sourceChat;
   @override
   State<ChatPage> createState() => _ChatPageState();
 }
 
 class _ChatPageState extends State<ChatPage> {
-  List<ChatModel> chats = [
-    ChatModel(
-        name: "Pradip Khandare",
-        icon: "assets/person.svg",
-        isGroup: false,
-        time: "4.00",
-        currentMessage: 'Hello Everyone!'),
-    ChatModel(
-        name: "Shreyash Jadhav",
-        icon: "assets/person.svg",
-        isGroup: false,
-        time: "4.00",
-        currentMessage: 'Chaha?'),
-    ChatModel(
-        name: "Disha Gujarathi",
-        icon: "assets/person.svg",
-        isGroup: false,
-        time: "4.00",
-        currentMessage: 'Khana khane chal'),
-    ChatModel(
-        name: "Suraj Kokare",
-        icon: "assets/person.svg",
-        isGroup: false,
-        time: "4.00",
-        currentMessage: 'Kay krtos?'),
-    ChatModel(
-        name: "AppDev-NTS",
-        icon: "assets/person.svg",
-        isGroup: true,
-        time: "9.00",
-        currentMessage: 'Hello team, doing wfh today'),
-    ChatModel(
-        name: "Shubham Jawale",
-        icon: "assets/person.svg",
-        isGroup: false,
-        time: "4.00",
-        currentMessage: 'Akshya nhi aala ka?'),
-    ChatModel(
-        name: "Rocksy",
-        icon: "assets/person.svg",
-        isGroup: false,
-        time: "4.00",
-        currentMessage: 'Kalki dekha kya?')
-  ];
 
   @override
   Widget build(BuildContext context) {
@@ -71,9 +28,9 @@ class _ChatPageState extends State<ChatPage> {
         ),
       ),
       body: ListView.builder(
-        itemCount: chats.length,
+        itemCount: widget.chatModels!.length,
         itemBuilder: (context, index) => CustomCard(
-          chatModel: chats[index],
+          chatModel: widget.chatModels![index], sourceChat: widget.sourceChat!,
         ),
       ),
     );

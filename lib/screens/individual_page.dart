@@ -4,13 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_node_express_mongo/custom_ui/own_message_card.dart';
 import 'package:flutter_node_express_mongo/custom_ui/reply_card.dart';
 import 'package:flutter_node_express_mongo/model/chat_model.dart';
+import 'package:flutter_node_express_mongo/model/message_model.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class IndividualPage extends StatefulWidget {
-  const IndividualPage({super.key, required this.chatModel});
+  const IndividualPage({super.key, required this.chatModel, this.sourceChat});
 
   final ChatModel chatModel;
+  final ChatModel? sourceChat;
 
   @override
   State<IndividualPage> createState() => _IndividualPageState();
@@ -22,6 +24,9 @@ class _IndividualPageState extends State<IndividualPage> {
   TextEditingController textEditingController = TextEditingController();
 
   late IO.Socket socket;
+
+  bool sendButton = false;
+  List<MessageModel> messages = [];
 
   @override
   void initState() {
@@ -36,18 +41,39 @@ class _IndividualPageState extends State<IndividualPage> {
     });
   }
 
-  void connect(){
+  void connect() {
     socket = IO.io("http://192.168.0.72:6000", <String, dynamic>{
-      "transports":["websocket"],
-      "autoConnect":false,
+      "transports": ["websocket"],
+      "autoConnect": false,
       'timeout': 10000, // Optional: set a longer timeout
     });
     socket.connect();
-    socket.emit("/test", "Hello World");
-    socket.onConnect((_) {
+    socket.emit("signin", widget.sourceChat!.id);
+    socket.onConnect((data) {
       print('Connected');
+      socket.on("message", (msg){
+        print(msg);
+        setMessage("destination", msg["message"]);
+      });
     });
     print(socket.connected);
+  }
+
+  void sendMessage(String message, int sourceId, int targetId) {
+    setMessage("source", message);
+    socket.emit(
+      "message",
+      {"message": message, "sourceId": sourceId, "targetId": targetId},
+    );
+  }
+
+  void setMessage(String type, String message){
+    MessageModel messageModel = MessageModel(type: type, message: message);
+    setState(() {
+        setState(() {
+          messages.add(messageModel);
+        });
+    });
   }
 
   @override
@@ -173,7 +199,6 @@ class _IndividualPageState extends State<IndividualPage> {
             ],
           ),
           body: Container(
-
             height: MediaQuery.of(context).size.height,
             width: MediaQuery.of(context).size.width,
             child: WillPopScope(
@@ -191,12 +216,17 @@ class _IndividualPageState extends State<IndividualPage> {
                 children: [
                   Container(
                     height: MediaQuery.of(context).size.height - 140,
-                    child: ListView(
+                    child: ListView.builder(
+                      itemCount: messages.length,
+                      itemBuilder: (context, index){
+                          if(messages[index].type == "source"){
+                            return OwnMessageCard(message: messages[index].message,);
+                          }else {
+                            return ReplyMessageCard(message: messages[index].message);
+                          }
+                      },
                       shrinkWrap: true,
-                      children: [
-                        OwnMessageCard(),
-                        ReplyMessageCard(),
-                      ],
+
                     ),
                   ),
                   Align(
@@ -218,6 +248,17 @@ class _IndividualPageState extends State<IndividualPage> {
                                   borderRadius: BorderRadius.circular(25),
                                 ),
                                 child: TextFormField(
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      setState(() {
+                                        sendButton = true;
+                                      });
+                                    } else {
+                                      setState(() {
+                                        sendButton = false;
+                                      });
+                                    }
+                                  },
                                   controller: textEditingController,
                                   focusNode: focusNode,
                                   textAlignVertical: TextAlignVertical.center,
@@ -281,9 +322,17 @@ class _IndividualPageState extends State<IndividualPage> {
                                 backgroundColor: Theme.of(context).primaryColor,
                                 radius: 25,
                                 child: IconButton(
-                                  onPressed: () {},
-                                  icon: const Icon(
-                                    Icons.mic,
+                                  onPressed: () {
+                                    if (sendButton) {
+                                      sendMessage(
+                                          textEditingController.text,
+                                          widget.sourceChat!.id!,
+                                          widget.chatModel!.id!);
+                                      textEditingController.clear();
+                                    }
+                                  },
+                                  icon: Icon(
+                                    sendButton ? Icons.send : Icons.mic,
                                     color: Colors.white,
                                   ),
                                 ),

@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_node_express_mongo/model/chat_model.dart';
 import 'package:flutter_node_express_mongo/pages/camera_page.dart';
 import 'package:flutter_node_express_mongo/pages/chat_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({super.key, this.chatModels, this.sourceChat});
+  final List<ChatModel>? chatModels;
+  final ChatModel? sourceChat;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -95,7 +98,7 @@ class _HomeScreenState extends State<HomeScreen>
         controller: _tabController,
         children: [
           CameraPage(),
-          ChatPage(),
+          ChatPage(chatModels: widget.chatModels!, sourceChat: widget.sourceChat!,),
           Text('Status'),
           Text('Calls'),
         ],

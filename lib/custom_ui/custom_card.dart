@@ -4,16 +4,24 @@ import 'package:flutter_node_express_mongo/screens/individual_page.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class CustomCard extends StatelessWidget {
-  const CustomCard({super.key, required this.chatModel});
+  const CustomCard({super.key, this.chatModel, this.sourceChat});
 
-  final ChatModel chatModel;
+  final ChatModel? chatModel;
+  final ChatModel? sourceChat;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) =>  IndividualPage(chatModel: chatModel),),);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => IndividualPage(
+              chatModel: chatModel!,
+              sourceChat: sourceChat,
+            ),
+          ),
+        );
       },
       child: Column(
         children: [
@@ -21,7 +29,7 @@ class CustomCard extends StatelessWidget {
             leading: CircleAvatar(
               radius: 30,
               child: SvgPicture.asset(
-                chatModel.isGroup! ? "assets/group.svg" : "assets/person.svg",
+                chatModel!.isGroup! ? "assets/group.svg" : "assets/person.svg",
                 color: Colors.white,
                 height: 38,
                 width: 38,
@@ -29,7 +37,7 @@ class CustomCard extends StatelessWidget {
               backgroundColor: Colors.blueGrey,
             ),
             title: Text(
-              chatModel.name!,
+              chatModel!.name!,
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
             ),
             subtitle: Row(
@@ -39,13 +47,13 @@ class CustomCard extends StatelessWidget {
                   width: 3,
                 ),
                 Text(
-                  chatModel.currentMessage!,
+                  chatModel!.currentMessage!,
                   style: TextStyle(fontSize: 13),
                 ),
               ],
             ),
             trailing: Text(
-              chatModel.time!,
+              chatModel!.time!,
               style: TextStyle(color: Colors.grey),
             ),
           ),
