@@ -43,6 +43,10 @@ Initial UI of this clone app looks as in the following image:
     <p>Chat Screen UI with dynamic messages using Node/Express JS</p>
     <img src="https://github.com/user-attachments/assets/e8a49e6a-9120-4150-9e8b-88376911089a" alt="Chat Screen UI with dynamic messages using Node/Express JS" width="100" height="200"/>
   </div>
+   <div>
+    <p>Status Screen UI with static users</p>
+    <img src="https://github.com/user-attachments/assets/08cd460d-61a8-4cff-9f75-1e5b848a0abc" alt="Chat Screen UI with dynamic messages using Node/Express JS" width="100" height="200"/>
+  </div>
 </div>
 
 
