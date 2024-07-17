@@ -3,6 +3,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_node_express_mongo/new_screen/landing_screen.dart';
 import 'package:flutter_node_express_mongo/screens/camera_screen.dart';
 import 'package:flutter_node_express_mongo/screens/home_screen.dart';
 import 'package:flutter_node_express_mongo/screens/login_screen.dart';
@@ -25,7 +26,7 @@ class MyApp extends StatelessWidget {
           secondary: const Color(0xFF128C7E),
         ),
       ),
-      home: const LoginScreen(),
+      home: const LandingScreen(),
     );
   }
 }
