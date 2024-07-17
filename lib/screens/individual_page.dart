@@ -44,7 +44,7 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   void connect() {
-    socket = IO.io("http://192.168.0.72:6000", <String, dynamic>{
+    socket = IO.io("https://fathomless-ravine-56538-5e0cc9e26132.herokuapp.com/", <String, dynamic>{
       "transports": ["websocket"],
       "autoConnect": false,
       'timeout': 10000, // Optional: set a longer timeout

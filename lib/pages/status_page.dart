@@ -37,7 +37,7 @@ class _StatusPageState extends State<StatusPage> {
             backgroundColor: Colors.greenAccent[700],
             elevation: 5,
             onPressed: () {},
-            child: Icon(
+            child: const Icon(
               Icons.camera_alt,
             ),
           ),
@@ -47,39 +47,53 @@ class _StatusPageState extends State<StatusPage> {
         child: Column(
           children: [
             //SizedBox(height: 10,),
-            HeadOwnStatus(),
+            const HeadOwnStatus(),
             label("Recent updates"),
-            OthersStatus(
+            const OthersStatus(
               name: "Shreyash Jadhav",
               imageName: "assets/2.jpeg",
               time: "16:01",
+              isSeen: false,
+              statusNum: 1,
             ),
-            OthersStatus(
+            const OthersStatus(
               name: "Disha Gujrathi",
               imageName: "assets/3.jpg",
               time: "11:01",
+              isSeen: false,
+              statusNum: 2,
             ),
-            OthersStatus(
+            const OthersStatus(
               name: "Vijay Tatya",
               imageName: "assets/1.jpg",
               time: "03:01",
+              isSeen: false,
+              statusNum: 3,
             ),
-            SizedBox(height: 10,),
+            const SizedBox(
+              height: 10,
+            ),
             label("Viewd updates"),
-            OthersStatus(
+            const OthersStatus(
               name: "Shreyash Jadhav",
               imageName: "assets/2.jpeg",
               time: "16:01",
+              isSeen: true,
+              statusNum: 1,
             ),
-            OthersStatus(
+            const OthersStatus(
               name: "Disha Gujrathi",
               imageName: "assets/3.jpg",
               time: "11:01",
+              isSeen: true,
+              statusNum: 4,
             ),
-            OthersStatus(
+            const OthersStatus(
               name: "Vijay Tatya",
               imageName: "assets/1.jpg",
               time: "03:01",
+              isSeen: true,
+              statusNum: 10,
             ),
           ],
         ),
@@ -90,17 +104,13 @@ class _StatusPageState extends State<StatusPage> {
   Widget label(String labelName) {
     return Container(
       height: 33,
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
+      width: MediaQuery.of(context).size.width,
       color: Colors.grey[300],
       child: Padding(
-        padding:
-        const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 7),
         child: Text(
           labelName,
-          style: TextStyle(
+          style: const TextStyle(
             fontSize: 13,
             fontWeight: FontWeight.bold,
           ),
