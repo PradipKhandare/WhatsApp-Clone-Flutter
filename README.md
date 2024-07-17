@@ -4,6 +4,10 @@ Initial UI of this clone app looks as in the following image:
 
 <div style="display: flex; flex-wrap: wrap; gap: 10px;">
   <div>
+    <p>Landing screen UI</p>
+    <img src="https://github.com/PradipKhandare/WhatsApp-Clone-Flutter/assets/121931206/eae37a20-fbc1-4a01-81da-a0da815afea6" alt="Chat screen UI" width="100" height="200"/>
+  </div>
+  <div>
     <p>Chat screen UI</p>
     <img src="https://github.com/PradipKhandare/WhatsApp-Clone-Flutter/assets/121931206/2ee7c021-2aeb-40f2-af57-037725559c9a" alt="Chat screen UI" width="100" height="200"/>
   </div>
@@ -48,6 +52,7 @@ Initial UI of this clone app looks as in the following image:
     <img src="https://github.com/user-attachments/assets/08cd460d-61a8-4cff-9f75-1e5b848a0abc" alt="Chat Screen UI with dynamic messages using Node/Express JS" width="100" height="200"/>
   </div>
 </div>
+
 
 
 
