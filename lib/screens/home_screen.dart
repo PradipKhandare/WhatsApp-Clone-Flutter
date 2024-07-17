@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_node_express_mongo/model/chat_model.dart';
 import 'package:flutter_node_express_mongo/pages/camera_page.dart';
 import 'package:flutter_node_express_mongo/pages/chat_page.dart';
+import 'package:flutter_node_express_mongo/pages/status_page.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key, this.chatModels, this.sourceChat});
@@ -99,7 +100,7 @@ class _HomeScreenState extends State<HomeScreen>
         children: [
           CameraPage(),
           ChatPage(chatModels: widget.chatModels!, sourceChat: widget.sourceChat!,),
-          Text('Status'),
+          StatusPage(),
           Text('Calls'),
         ],
       ),
