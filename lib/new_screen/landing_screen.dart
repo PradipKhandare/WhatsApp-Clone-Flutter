@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_node_express_mongo/new_screen/login_page.dart';
 import 'package:flutter_node_express_mongo/screens/login_screen.dart';
 
 class LandingScreen extends StatelessWidget {
@@ -14,10 +15,10 @@ class LandingScreen extends StatelessWidget {
         child: SafeArea(
           child: Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 50,
               ),
-              Text(
+              const Text(
                 "Welcome to whatsapp",
                 style: TextStyle(
                     color: Colors.teal,
@@ -41,46 +42,58 @@ class LandingScreen extends StatelessWidget {
                 child: RichText(
                   textAlign: TextAlign.center,
                   text: TextSpan(
-                    style: TextStyle(
+                    style: const TextStyle(
                       color: Colors.black,
                       fontSize: 17,
                     ),
                     children: [
-                      TextSpan(text: "Agree and continue to accept the", style: TextStyle(
-                        color: Colors.grey[600],
-                      ),),
                       TextSpan(
-                          text: " Whatsapp Terms of Service and Privacy Policy",
-                          style: TextStyle(color: Colors.cyan,),),
+                        text: "Agree and continue to accept the",
+                        style: TextStyle(
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                      const TextSpan(
+                        text: " Whatsapp Terms of Service and Privacy Policy",
+                        style: TextStyle(
+                          color: Colors.cyan,
+                        ),
+                      ),
                     ],
                   ),
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 20,
               ),
               InkWell(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (builder) => const LoginScreen(),),);
+                onTap: () {
+                  Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                          builder: (builder) => const LoginPage()),
+                      (route) => false);
                 },
                 child: Container(
                   height: 50,
                   width: MediaQuery.of(context).size.width - 110,
                   child: Card(
-                   margin: EdgeInsets.all(0),
+                    margin: const EdgeInsets.all(0),
                     color: Colors.greenAccent[700],
                     elevation: 8,
-                    child: Center(
-                      child: Text("AGREE AND CONTINUE", style: TextStyle(
-                        color: Colors.white,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 18,
-                      ),),
+                    child: const Center(
+                      child: Text(
+                        "AGREE AND CONTINUE",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 18,
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-
             ],
           ),
         ),

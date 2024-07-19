@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
           secondary: const Color(0xFF128C7E),
         ),
       ),
-      home: const LandingScreen(),
+      home: const LoginScreen(),
     );
   }
 }

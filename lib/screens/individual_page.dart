@@ -2,12 +2,18 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' as foundation;
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_node_express_mongo/custom_ui/own_file_card.dart';
 import 'package:flutter_node_express_mongo/custom_ui/own_message_card.dart';
 import 'package:flutter_node_express_mongo/custom_ui/reply_card.dart';
 import 'package:flutter_node_express_mongo/model/chat_model.dart';
 import 'package:flutter_node_express_mongo/model/message_model.dart';
+import 'package:flutter_node_express_mongo/screens/camera_view.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+
+import '../custom_ui/reply_file_card.dart';
+import 'camera_screen.dart';
 
 class IndividualPage extends StatefulWidget {
   const IndividualPage({super.key, required this.chatModel, this.sourceChat});
@@ -24,6 +30,8 @@ class _IndividualPageState extends State<IndividualPage> {
   bool show = false;
   TextEditingController textEditingController = TextEditingController();
   ScrollController _scrollController = ScrollController();
+  ImagePicker _imagePicker = ImagePicker();
+  late XFile file;
 
   late IO.Socket socket;
 
@@ -44,41 +52,48 @@ class _IndividualPageState extends State<IndividualPage> {
   }
 
   void connect() {
-    socket = IO.io("https://fathomless-ravine-56538-5e0cc9e26132.herokuapp.com/", <String, dynamic>{
-      "transports": ["websocket"],
-      "autoConnect": false,
-      'timeout': 10000, // Optional: set a longer timeout
-    });
+    socket = IO.io(
+        "http://192.168.0.72:6000",
+        <String, dynamic>{
+          "transports": ["websocket"],
+          "autoConnect": false,
+        });
     socket.connect();
     socket.emit("signin", widget.sourceChat!.id);
     socket.onConnect((data) {
       print('Connected');
       socket.on("message", (msg) {
         print(msg);
-        setMessage("destination", msg["message"]);
-        _scrollController.animateTo(
-            _scrollController
-                .position.maxScrollExtent,
-            duration:
-            Duration(milliseconds: 300),
-            curve: Curves.easeOut);
+        setMessage("destination", msg["message"], msg["path"]);
+        _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+            duration: Duration(milliseconds: 300), curve: Curves.easeOut);
       });
     });
     print(socket.connected);
   }
 
-  void sendMessage(String message, int sourceId, int targetId) {
-    setMessage("source", message);
+  void onImageSend(String path) {
+    print("------>>>>>>>>>>>>Hey there path is ${path}");
+  }
+
+  void sendMessage(String message, int sourceId, int targetId, String path) {
+    setMessage("source", message, path);
     socket.emit(
       "message",
-      {"message": message, "sourceId": sourceId, "targetId": targetId},
+      {
+        "message": message,
+        "sourceId": sourceId,
+        "targetId": targetId,
+        "path": path
+      },
     );
   }
 
-  void setMessage(String type, String message) {
+  void setMessage(String type, String message, String path) {
     MessageModel messageModel = MessageModel(
         type: type,
         message: message,
+        path: path,
         time: DateTime.now().toString().substring(10, 16));
     setState(() {
       setState(() {
@@ -227,7 +242,7 @@ class _IndividualPageState extends State<IndividualPage> {
               child: Column(
                 children: [
                   Expanded(
-                    // height: MediaQuery.of(context).size.height - 140,
+                    //height: MediaQuery.of(context).size.height - 140,
                     child: ListView.builder(
                       controller: _scrollController,
                       itemCount: messages.length + 1,
@@ -251,6 +266,12 @@ class _IndividualPageState extends State<IndividualPage> {
                       },
                       shrinkWrap: true,
                     ),
+                    // child: ListView(
+                    //   children: [
+                    //     OwnFileCard(),
+                    //     ReplyFileCard(),
+                    //   ],
+                    // ),
                   ),
                   Align(
                     alignment: Alignment.bottomCenter,
@@ -327,7 +348,17 @@ class _IndividualPageState extends State<IndividualPage> {
                                             ),
                                           ),
                                           IconButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (builder) =>
+                                                      CameraScreen(
+                                                    onImageSend: onImageSend,
+                                                  ),
+                                                ),
+                                              );
+                                            },
                                             icon: Icon(
                                               Icons.camera_alt,
                                               color: Theme.of(context)
@@ -359,7 +390,8 @@ class _IndividualPageState extends State<IndividualPage> {
                                         sendMessage(
                                             textEditingController.text,
                                             widget.sourceChat!.id!,
-                                            widget.chatModel!.id!);
+                                            widget.chatModel!.id!,
+                                            "");
                                         textEditingController.clear();
                                         setState(() {
                                           sendButton = false;
@@ -403,15 +435,47 @@ class _IndividualPageState extends State<IndividualPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   iconCreation(
-                      Icons.insert_drive_file, Colors.indigo, 'Documents'),
+                    Icons.insert_drive_file,
+                    Colors.indigo,
+                    'Documents',
+                    () async {},
+                  ),
+
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.camera_alt, Colors.pink, 'Camera'),
+
+                  iconCreation(Icons.camera_alt, Colors.pink, 'Camera',
+                      () async {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (builder) => CameraScreen(
+                          onImageSend: onImageSend,
+                        ),
+                      ),
+                    );
+                  }),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.insert_photo, Colors.purple, 'Gallery'),
+                  iconCreation(Icons.insert_photo, Colors.purple, 'Gallery', () async {
+                    final pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
+                    if (pickedFile != null) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (builder) => CameraViewPage(
+                            path: pickedFile.path,
+                            onImageSend: onImageSend,
+                          ),
+                        ),
+                      );
+                    } else {
+                      // Handle the case where no image was selected
+                      print("No image selected.");
+                    }
+                  }),
                 ],
               ),
               const SizedBox(
@@ -420,15 +484,18 @@ class _IndividualPageState extends State<IndividualPage> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  iconCreation(Icons.headset, Colors.orange, 'Audio'),
+                  iconCreation(
+                      Icons.headset, Colors.orange, 'Audio', () async {}),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.location_pin, Colors.teal, 'Location'),
+                  iconCreation(
+                      Icons.location_pin, Colors.teal, 'Location', () async {}),
                   const SizedBox(
                     width: 40,
                   ),
-                  iconCreation(Icons.person, Colors.blue, 'Contact'),
+                  iconCreation(
+                      Icons.person, Colors.blue, 'Contact', () async {}),
                 ],
               ),
             ],
@@ -438,9 +505,10 @@ class _IndividualPageState extends State<IndividualPage> {
     );
   }
 
-  Widget iconCreation(IconData icon, Color color, String text) {
+  Widget iconCreation(
+      IconData icon, Color color, String text, Function() onTap) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       child: Column(
         children: [
           CircleAvatar(

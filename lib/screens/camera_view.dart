@@ -1,10 +1,11 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 
-class CameraView extends StatelessWidget {
-  const CameraView({super.key, this.path});
+class CameraViewPage extends StatelessWidget {
+  const CameraViewPage({super.key, required this.path, required this.onImageSend});
 
-  final String? path;
+  final String path;
+  final Function(String) onImageSend;
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +53,7 @@ class CameraView extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height - 150,
               child: Image.file(
-                File(path!),
+                File(path),
                 fit: BoxFit.cover,
               ),
             ),
@@ -76,15 +77,24 @@ class CameraView extends StatelessWidget {
                       fontSize: 17,
                     ),
                     suffixIcon: Padding(
-                      padding: const EdgeInsets.only(right: 8.0), // Add some padding if needed
+                      padding: const EdgeInsets.only(right: 8.0),
                       child: CircleAvatar(
                         radius: 15,
-                        child: const Icon(Icons.check, size: 18),
                         backgroundColor: Colors.tealAccent[700],
+                        child: InkWell(
+                          onTap: () {
+                            onImageSend(path);
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(
+                            Icons.check,
+                            size: 18,
+                          ),
+                        ),
                       ),
                     ),
                     prefixIcon: const Padding(
-                      padding: EdgeInsets.only(left: 8.0), // Add some padding if needed
+                      padding: EdgeInsets.only(left: 8.0),
                       child: Icon(
                         Icons.add_photo_alternate,
                         color: Colors.white,
@@ -92,7 +102,7 @@ class CameraView extends StatelessWidget {
                       ),
                     ),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(vertical: 10), // Adjust as needed
+                    contentPadding: const EdgeInsets.symmetric(vertical: 10),
                   ),
                 ),
               ),

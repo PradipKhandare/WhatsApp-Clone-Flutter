@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_node_express_mongo/screens/video_view.dart';
@@ -12,7 +11,9 @@ import 'package:image_picker/image_picker.dart';
 late List<CameraDescription> cameras;
 
 class CameraScreen extends StatefulWidget {
-  const CameraScreen({super.key});
+  const CameraScreen({super.key, this.onImageSend});
+
+  final Function(String)? onImageSend;
 
   @override
   State<CameraScreen> createState() => _CameraScreenState();
@@ -81,20 +82,20 @@ class _CameraScreenState extends State<CameraScreen> {
 
                             flash
                                 ? _cameraController
-                                    .setFlashMode(FlashMode.torch)
+                                .setFlashMode(FlashMode.torch)
                                 : _cameraController.setFlashMode(FlashMode.off);
                           },
                           icon: flash
                               ? const Icon(
-                                  Icons.flash_on,
-                                  color: Colors.white,
-                                  size: 28,
-                                )
+                            Icons.flash_on,
+                            color: Colors.white,
+                            size: 28,
+                          )
                               : const Icon(
-                                  Icons.flash_off,
-                                  color: Colors.white,
-                                  size: 28,
-                                )),
+                            Icons.flash_off,
+                            color: Colors.white,
+                            size: 28,
+                          )),
                       GestureDetector(
                         onLongPress: () async {
                           await _cameraController.startVideoRecording();
@@ -104,7 +105,7 @@ class _CameraScreenState extends State<CameraScreen> {
                         },
                         onLongPressUp: () async {
                           XFile videopath =
-                              await _cameraController.stopVideoRecording();
+                          await _cameraController.stopVideoRecording();
                           setState(() {
                             isRecoring = false;
                           });
@@ -122,27 +123,26 @@ class _CameraScreenState extends State<CameraScreen> {
                         },
                         child: isRecoring
                             ? const Icon(
-                                Icons.radio_button_on,
-                                color: Colors.red,
-                                size: 80,
-                              )
+                          Icons.radio_button_on,
+                          color: Colors.red,
+                          size: 80,
+                        )
                             : const Icon(
-                                Icons.panorama_fish_eye,
-                                color: Colors.white,
-                                size: 70,
-                              ),
+                          Icons.panorama_fish_eye,
+                          color: Colors.white,
+                          size: 70,
+                        ),
                       ),
                       IconButton(
-                        onPressed: () async{
+                        onPressed: () async {
                           setState(() {
-                            isCameraFront  = !isCameraFront;
+                            isCameraFront = !isCameraFront;
                             transform = transform + pi;
                           });
                           int cameraPos = isCameraFront ? 0 : 1;
                           _cameraController = CameraController(
                               cameras[cameraPos], ResolutionPreset.high);
                           cameraValue = _cameraController.initialize();
-
                         },
                         icon: Transform.rotate(
                           angle: transform,
@@ -181,24 +181,21 @@ class _CameraScreenState extends State<CameraScreen> {
     });
 
     try {
-      final imagePicker = ImagePicker();
-      final pickedImage = await imagePicker.pickImage(
-        source: ImageSource.camera,
-        maxHeight: 600,
-      );
-
-      if (pickedImage == null) {
-        return;
-      }
-
-      setState(() {
-        _selectedImage = File(pickedImage.path);
-      });
-
-      Navigator.push(
+      final XFile picture = await _cameraController.takePicture();
+      // Check if onImageSend is not null before calling it
+      if (widget.onImageSend != null) {
+        Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (builder) => CameraView(path: _selectedImage!.path)));
+            builder: (builder) => CameraViewPage(
+              path: picture.path,
+              onImageSend: widget.onImageSend!,
+            ),
+          ),
+        );
+      } else {
+        print("onImageSend is null");
+      }
     } catch (e) {
       // Handle any errors here
       print(e);
